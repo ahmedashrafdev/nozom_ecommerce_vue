@@ -83,6 +83,8 @@ export default {
             'new-arrivals-products'
         ];
         await this.$store.dispatch('collection/getCollectionsBySlugs', queries);
+
+        
     }
 };
 </script>

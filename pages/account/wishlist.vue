@@ -13,6 +13,7 @@ import HeaderMobile from '~/components/shared/mobile/HeaderMobile';
 
 export default {
     transition: 'zoom',
+    middleware: 'auth',
     components: {
         HeaderMobile,
         Wishlist,

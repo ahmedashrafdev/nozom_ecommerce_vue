@@ -49,6 +49,9 @@ export default {
                 }
             ]
         };
+    },
+    created(){
+        this.$auth.loggedIn ? this.$router.push('/') : ''
     }
 };
 </script>

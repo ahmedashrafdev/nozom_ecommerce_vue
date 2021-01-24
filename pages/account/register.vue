@@ -33,6 +33,7 @@ import HeaderMobile from '~/components/shared/mobile/HeaderMobile';
 
 export default {
     transition: 'zoom',
+    // auth: 'guest',
     components: {
         HeaderMobile,
         Register,
@@ -51,6 +52,10 @@ export default {
                 }
             ]
         };
+    },
+    created(){
+        this.$auth.loggedIn ? this.$router.push('/') : ''
+
     }
 };
 </script>

@@ -1,7 +1,10 @@
 export default {
+    publicRuntimeConfig: {
+        baseURL: process.env.BASE_URL
+    },
     head: {
-        titleTemplate: 'Martfury - Multi-purpose Ecomerce template with vuejs',
-        title: 'Martfury - Multi-purpose Ecomerce template with vuejs',
+        titleTemplate: 'Nozom -  Ecomerce template',
+        title: 'Nozom -  Ecomerce template',
         meta: [
             { charset: 'utf-8' },
             {
@@ -31,7 +34,7 @@ export default {
         '~/static/css/bootstrap.min.css',
         '~/assets/scss/style.scss'
     ],
-
+    
     plugins: [
         { src: '~plugins/vueliate.js', ssr: false },
         { src: '~/plugins/swiper-plugin.js', ssr: false },
@@ -43,6 +46,7 @@ export default {
     buildModules: [
         '@nuxtjs/vuetify',
         '@nuxtjs/style-resources',
+        '@nuxtjs/auth-next',
         'cookie-universal-nuxt'
     ],
 
@@ -55,7 +59,7 @@ export default {
     i18n: {
         locales: [
             { code: 'en', file: 'en.json' },
-            { code: 'fr', file: 'fr.json' }
+            { code: 'ar', file: 'ar.json' }
         ],
         lazy: true,
         defaultLocale: 'en',
@@ -67,8 +71,36 @@ export default {
         linkExactActiveClass: 'active'
     },
 
+    auth: {
+        strategies: {
+          local: {
+            token: {
+              property: 'access_token',
+              required: true,
+              type: 'Bearer'
+            },
+            redirect: {
+                login: '/account/login',
+                logout: '/',
+                callback: '/account/login',
+                home: '/'
+            },
+            user: {
+            //   property: 'user',
+              autoFetch: true
+            },
+            endpoints: {
+                
+              login: { url: `http://localhost:8000/api/login`, method: `post` },
+              logout: { url: `http://localhost:8000/api/logout`, method: `post` },
+              user: { url: `http://localhost:8000/api/user`, method: `get` }
+            }
+          }
+        }
+    },
+
     server: {
-        port: 4002,
+        port: 3000,
         host: 'localhost'
     }
 };

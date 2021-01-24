@@ -1,6 +1,9 @@
 <template lang="html">
     <form>
         <div class="ps-form__content">
+            <div class="mb-10" v-if="msg">
+                <span class="error">{{msg}}</span>
+            </div>
             <h5>Log In Your Account</h5>
             <div class="form-group">
                 <v-text-field
@@ -33,6 +36,15 @@
                     type="submit"
                     class="ps-btn ps-btn--fullwidth"
                     @click.prevent="handleSubmit"
+                    v-if="isLoading"
+                >
+                    Loading
+                </button>
+                <button
+                    type="submit"
+                    class="ps-btn ps-btn--fullwidth"
+                    @click.prevent="handleSubmit"
+                    v-else
                 >
                     Login
                 </button>
@@ -67,7 +79,7 @@
 </template>
 
 <script>
-import { email, required } from 'vuelidate/lib/validators';
+import { required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 
 export default {
@@ -88,20 +100,31 @@ export default {
     },
     data() {
         return {
-            emailOrPhone: null,
-            password: null
+            emailOrPhone: "",
+            password: "",
+            msg : "",
+            isLoading: false,
+
         };
     },
     validations: {
         emailOrPhone: { required },
-        password: { required }
+        password: { required },
     },
     methods: {
-        handleSubmit() {
+       async handleSubmit()  {
+            this.isLoading = true
             this.$v.$touch();
             if (!this.$v.$invalid) {
-                this.$store.dispatch('auth/login', this.$data);
-                
+                try {
+                    let response = await this.$auth.loginWith('local', { data: {emailOrPhone : this.emailOrPhone , password :this.password} })
+                    console.log(response)
+                    this.isLoading = false
+
+                } catch (err) {
+                    console.log(err)
+                    this.isLoading = false
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 <template lang="html">
-    <div v-if="!isLoggedIn" class="ps-block--user-header">
+    <div v-if="!$auth.loggedIn" class="ps-block--user-header">
         <div class="ps-block__left">
             <i class="icon-user"></i>
         </div>
@@ -22,7 +22,7 @@
                     </nuxt-link>
                 </li>
                 <li class="ps-block__footer">
-                    <a href="#" @click.prevent="handleLogout">
+                    <a href="#" @click.prevent="logout()">
                         Logout
                     </a>
                 </li>
@@ -72,9 +72,10 @@ export default {
         };
     },
     methods: {
-        handleLogout() {
-            this.$store.dispatch('auth/setAuthStatus', false);
-        }
+        async logout() {
+            await this.$auth.logout();
+        },
+       
     }
 };
 </script>

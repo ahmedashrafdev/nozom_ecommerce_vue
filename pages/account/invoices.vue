@@ -12,6 +12,7 @@ import HeaderMobile from '~/components/shared/mobile/HeaderMobile';
 
 export default {
     transition: 'zoom',
+    middleware: 'auth',
     middleware: 'authentication',
     components: {
         HeaderMobile,

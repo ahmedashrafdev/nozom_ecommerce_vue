@@ -9,12 +9,10 @@
             </li>
         </template>
         <li>
-            <nuxt-link to="/account/my-account">
-                <a>
+            <a @click.prevent="logout()">
                     <i class="icon-power-switch"></i>
                     Logout
-                </a>
-            </nuxt-link>
+            </a>
         </li>
     </ul>
 </template>
@@ -27,6 +25,11 @@ export default {
             type: Array,
             default: () => []
         }
+    },
+    methods:{
+        async logout() {
+            await this.$auth.logout();
+        },
     }
 };
 </script>

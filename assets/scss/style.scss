@@ -40,3 +40,22 @@
 @import 'themes/effect';
 
 @import 'elements/helpers';
+
+.btn{
+    padding: 10px 20px;
+    background-color: $color-1st;
+
+    color:#fff !important;
+    font-size: 16px;
+    & i{
+        margin-right: 10px;
+    }
+}
+.err-list{
+    margin: 20px 0;
+}
+
+.flex-space{
+    display: flex;
+    justify-content: space-between;
+}

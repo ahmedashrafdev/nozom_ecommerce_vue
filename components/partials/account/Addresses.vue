@@ -9,7 +9,7 @@
                                 <img src="/img/users/3.jpg" />
                                 <figure>
                                     <figcaption>Hello</figcaption>
-                                    <p>username@gmail.com</p>
+                                    <p>{{$auth.user.email}}</p>
                                 </figure>
                             </div>
                             <div class="ps-widget__content">
@@ -22,41 +22,29 @@
                     <div class="ps-section--account-setting">
                         <div class="ps-section__content">
                             <div class="row">
-                                <div class="col-md-6 col-12">
-                                    <figure class="ps-block--address">
-                                        <figcaption>
-                                            Billing address
-                                        </figcaption>
-                                        <div class="ps-block__content">
-                                            <p>
-                                                You Have Not Set Up This Type Of
-                                                Address Yet.
-                                            </p>
-                                            <nuxt-link
-                                                to="/account/edit-address"
-                                            >
-                                                <a>Edit</a>
-                                            </nuxt-link>
-                                        </div>
-                                    </figure>
+                                <div class="col-md-12 col-12 text-right">
+                                    <nuxt-link to="/account/addresses/create" class="btn"><i class="icon-plus"></i>Add</nuxt-link>
                                 </div>
-                                <div class="col-md-6 col-12">
-                                    <figure class="ps-block--address">
-                                        <figcaption>
-                                            Shipping address
-                                        </figcaption>
-                                        <div class="ps-block__content">
-                                            <p>
-                                                You Have Not Set Up This Type Of
-                                                Address Yet.
-                                            </p>
-                                            <nuxt-link
-                                                to="/account/edit-address"
-                                            >
-                                                <a>Edit</a>
-                                            </nuxt-link>
-                                        </div>
-                                    </figure>
+                                <div class="col-md-12 col-12" v-if="addresses.length > 0">
+                                    <div v-for="address in addresses" :key="address.id" >
+                                        <ul>
+                                            <li>BuildingNo :{{address.BuildingNo}}</li>
+                                            <li>RowNo :{{address.RowNo}}</li>
+                                            <li>FlatNo :{{address.FlatNo}}</li>
+                                            <li>Street :{{address.Street}}</li>
+                                            <li>Remark :{{address.Remark}}</li>
+                                            <!-- <li>Main :{{address.Main}}</li> -->
+                                        </ul> 
+
+                                        <div class="flex">
+                                            <nuxt-link :to="`/account/addresses/${address.id}`" class="btn mr-5"><i class="icon-edit"></i>Edit</nuxt-link>
+                                            <a @click="deleteAddress(address.id)" class="btn danger red"><i class="icon-trash"></i>Delete</a>
+                                        </div>   
+                                       
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-12" v-else>
+                                    <p>Sorry You don't have any address</p>
                                 </div>
                             </div>
                         </div>
@@ -69,9 +57,16 @@
 
 <script>
 import AccountLinks from './modules/AccountLinks';
+import { mapGetters } from 'vuex';
 export default {
     name: 'Addresses',
     components: { AccountLinks },
+
+    computed: {
+        ...mapGetters({
+            addresses: 'user/addresses'
+        })
+    },
     data() {
         return {
             accountLinks: [
@@ -108,6 +103,27 @@ export default {
                 }
             ]
         };
+    },
+    methods: {
+        getUserAddresses(){
+            this.$store.dispatch('user/getAddresses')
+        },
+        deleteAddress(id){
+            this.$store.dispatch('user/deleteAddress' , id).then(()=>{
+                this.$notify({
+                    group: 'addCartSuccess',
+                    title: 'Success!',
+                    text: `Address has been deleted successfully`
+                });
+                this.$store.dispatch('user/getAddresses')
+
+            })
+        },
+        
+    },
+    created() {
+        this.getUserAddresses()
+
     }
 };
 </script>

@@ -1,23 +1,20 @@
-import Cookies from 'js-cookie';
-import axios from 'axios';
+import axios from "axios";
+const api = axios.create ({
+    baseURL: 'http://localhost:8000/api/',
+    headers: { 'Accept': 'application/json'}
+})
 
-const token = Cookies.get('id_token');
-const baseDomain = 'http://192.168.1.40/api/';
+api.interceptors.request.use(
+    config => {
+      const token = localStorage.getItem("auth._token.local");
+      if (token) {
+        config.headers.common['Authorization'] = `${token}`
+      }
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    }
+  );
 
-export const customHeaders = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json'
-};
-
-export const baseUrl = `${baseDomain}`;
-
-export default axios.create({
-    baseUrl,
-    headers: customHeaders
-});
-
-export const serializeQuery = query => {
-    return Object.keys(query)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
-        .join('&');
-};
+  export default api;

@@ -13,6 +13,7 @@ import Compare from '~/components/partials/account/Compare';
 import { getListOfProductId } from '~/utilities/product-helper';
 
 export default {
+    middleware: 'auth',
     components: {
         Compare,
         Checkout,
